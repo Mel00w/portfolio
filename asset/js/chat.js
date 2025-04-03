@@ -145,3 +145,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
   observer.observe(h2);
 });
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const links = document.querySelectorAll('a[href^="#"]');
+
+  links.forEach(link => {
+    link.addEventListener("click", function (event) {
+      event.preventDefault();
+      const targetId = this.getAttribute("href").substring(1);
+      const targetElement = document.getElementById(targetId);
+
+      if (targetElement) {
+        targetElement.classList.add("highlight");
+        setTimeout(() => {
+          targetElement.classList.remove("highlight");
+        }, 1000);
+
+        window.scrollTo({
+          top: targetElement.offsetTop,
+          behavior: "smooth"
+        });
+      }
+    });
+  });
+});
