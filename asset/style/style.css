@@ -1,8 +1,13 @@
+@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css?family=Space%20Grotesk:700|Space%20Grotesk:400");
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
 html {
   scroll-behavior: smooth;
+}
+
+html, body {
+  overflow-x: hidden;
 }
 
 * {
@@ -72,16 +77,22 @@ a[href^="#realisation"]:active {
 */
 .chat {
   overflow: hidden;
-  width: 300px;
-  height: 259px;
+  width: clamp(56px, 18vw, 300px);
+  /* ne jamais dépasser la largeur disponible (-2rem pour le gap right+left) */
+  max-width: calc(100vw - 2rem);
+  height: clamp(56px, 30vh, 259px);
+  max-height: calc(100vh - 2rem);
   background: url("../img/chat.png") right bottom no-repeat;
-  background-size: 5rem;
-  image-rendering: auto; /* Force un rendu net */
-  will-change: background-image;
+  background-size: clamp(1.5rem, 8vw, 10rem);
+  image-rendering: auto;
+  will-change: background-image, transform;
   position: fixed;
-  bottom: 0;
-  right: 0;
+  bottom: 1rem;
+  right: 1rem;
   z-index: 9999;
+  touch-action: manipulation;
+  /* évite que le fixed provoque overflow sur certains navigateurs */
+  transform: translateZ(0);
 }
 
 @keyframes marche {
@@ -704,22 +715,26 @@ main #card-white div:nth-child(2) {
 #competence .soft-skill {
   margin: 1rem 2rem;
   position: relative;
-  width: 40vh;
-  height: 40vh;
+  /* taille adaptative : garde une forme carrée (aspect-ratio) */
+  width: clamp(140px, 30vw, 320px);
+  aspect-ratio: 1/1;
+  max-width: calc(100vw - 3rem);
+  max-height: calc(100vh - 6rem);
   z-index: 1;
-  border-radius: 100%;
-  background: url("../img/giphy.gif") center center/cover no-repeat;
+  border-radius: 50%;
+  background: url("../img/giphy.gif") center/cover no-repeat;
   transition: all 0.5s ease;
+  overflow: hidden;
 }
 #competence .soft-skill::before {
   content: "";
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: -1;
-  border-radius: 100%;
+  border-radius: 50%;
   background: rgba(255, 255, 255, 0.397);
   transition: all 0.5s ease;
 }
@@ -750,7 +765,7 @@ main #card-white div:nth-child(2) {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   text-transform: capitalize;
   font-weight: 400;
 }
@@ -764,7 +779,7 @@ main #card-white div:nth-child(2) {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-  margin: 1rem 0;
+  margin: 0.6rem 0;
   text-align: center;
   cursor: default;
 }
@@ -1001,6 +1016,17 @@ button:hover::before {
     left: 8vw;
   }
 }
+@media (max-width: 480px) {
+  .chat {
+    width: 56px;
+    height: 56px;
+    background-size: 2rem;
+    bottom: 0.6rem;
+    right: 0.6rem;
+    max-width: calc(100vw - 1.2rem);
+    max-height: calc(100vh - 1.2rem);
+  }
+}
 @media (min-width: 1024px) {
   /*
   **********************************
@@ -1009,6 +1035,10 @@ button:hover::before {
   */
   .chat {
     background-size: 10rem;
+    width: 300px;
+    height: 259px;
+    bottom: 1rem;
+    right: 1rem;
   }
   /* HOMEPAGE */
   #homepage {
